@@ -7,12 +7,15 @@ public class ColumnPool : MonoBehaviour
     public int columnPoolSize = 5;
     public GameObject columnPrefab;
     public float spawnRate = 4f;
+    public float columnMin = -1f;
+    public float columnMax = 3.5f;
 
 
     private GameObject[] columns;
     private Vector2 objectPoolPosition = new Vector2(-15, -25);
     private float timeSinceLastSpawned;
-
+    private float spawnXPosition = 10f;
+    private int currentcolumn = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +30,18 @@ public class ColumnPool : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        timeSinceLastSpawned += Time.deltaTime;
+
+        if (GameControl.instance.gameOver == false && timeSinceLastSpawned >= spawnRate)
+        {
+            timeSinceLastSpawned = 0;
+            float spawnYPosition = Random.Range(columnMin, columnMax);
+          columns[currentcolumn].transform.position = new Vector2(spawnXPosition, spawnYPosition);
+            currentcolumn++;
+            if (currentcolumn >= columnPoolSize)
+            {
+                currentcolumn = 0;
+            }
+        }
     }
 }
